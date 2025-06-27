@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Pulse Billing ETL Service is a serverless application that automates the extraction, transformation, and loading (ETL) of billing data from Google BigQuery across multiple organizations. It manages datasets, job status tracking, and provides robust error handling through a MySQL database backend.
+The Billing ETL Service is a serverless application that automates the extraction, transformation, and loading (ETL) of billing data from Google BigQuery across multiple organizations. It manages datasets, job status tracking, and provides robust error handling through a MySQL database backend.
 
 ## Architecture
 
