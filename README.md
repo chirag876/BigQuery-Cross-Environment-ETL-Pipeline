@@ -349,3 +349,8 @@ LOG_LEVEL=DEBUG
 - **Data Quality**: Implement data validation checks
 - **Backup Strategy**: Regular database backups
 - **Version Control**: Tag releases for rollback capability
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).  
+© 2025 Chirag Gupta. Please credit if reused.
