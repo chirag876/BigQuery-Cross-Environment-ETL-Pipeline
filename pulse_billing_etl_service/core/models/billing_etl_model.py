@@ -3,6 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ValidationError
 
+
 class CustomException(Exception):
     def __init__(self, message, status_code=400):
         super().__init__(message)
@@ -17,6 +18,8 @@ class BillingETLJob(BaseModel):
     target_date: Optional[str] = None
 
 class BillingETLMessage(BaseModel):
+    """Pub/Sub trigger payload. Only org_id is required;
+    all other configuration is fetched dynamically from the database."""
     org_id: int
     
 

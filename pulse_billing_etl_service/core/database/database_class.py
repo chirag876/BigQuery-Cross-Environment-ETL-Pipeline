@@ -1,7 +1,8 @@
 import core.constants as const
 import sqlalchemy
-from sqlalchemy.exc import SQLAlchemyError
 from core.utility import logger
+from sqlalchemy.exc import SQLAlchemyError
+
 
 class DB:
 
@@ -43,5 +44,5 @@ class DB:
             self.connection.commit()
             return (res, None)
         except SQLAlchemyError as e:
-            print(f"Error executing query: {e}")
+            logger.error_log(f"Error executing query: {e}")
             return (None, e)

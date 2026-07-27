@@ -37,7 +37,7 @@ class BillingETLDB:
         res, err = self.db.execute(query, filtered_values)
 
         if err is not None:
-            logger.info_log(f"Error saving ETL status: {err}")
+            logger.error_log(f"Error saving ETL status: {err}")
             return err
 
         return res
@@ -85,7 +85,7 @@ class BillingETLDB:
 
         # Convert Row to dict
         result = dict(row._mapping)
-        print(f"DEBUG get_client_billing_alert_config dict result: {result}")
+        logger.info_log(f"Fetched client billing alert config: {result}")
         return result, None
 
     def update_step_completed_in_user_stepper_form_step_status(self, stepid: int, org_id: int, step_completed: bool):

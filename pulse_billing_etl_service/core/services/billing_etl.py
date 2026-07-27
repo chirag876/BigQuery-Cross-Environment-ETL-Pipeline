@@ -9,27 +9,9 @@ from core.database.database_class import DB
 from core.models.billing_etl_model import BillingETLMessage
 from core.utility import logger
 from core.utility.dataset_utils import create_and_verify_pulse_datasets
-from google.api_core.exceptions import NotFound
-from google.auth import impersonated_credentials
+from google.api_core.exceptions import Conflict, NotFound
 from google.cloud import bigquery
 from google.cloud.bigquery import Client
-from google.oauth2 import service_account
-from google.api_core.exceptions import NotFound, Conflict
-
-
-def get_impersonated_credentials(target_service_account_email: str):
-    source_credentials = service_account.Credentials.from_service_account_file(
-        "/secret/BILLING_ALERTS_SOURCE_SA_KEY")
-
-    target_scopes = ["https://www.googleapis.com/auth/cloud-platform"]
-
-    impersonated_creds = impersonated_credentials.Credentials(
-        source_credentials=source_credentials,
-        target_principal=target_service_account_email,
-        target_scopes=target_scopes,
-        lifetime=3600,
-    )
-    return impersonated_creds
 
 
 def serialize_row(row):
@@ -43,8 +25,12 @@ def serialize_row(row):
 def process_etl_job(pubsub_message: dict, context: Optional[dict] = None):
     """Handles ETL job triggered by Pub/Sub, processes the billing data,
     and logs the outcome to the status table.
+
+    Args:
+        pubsub_message: Decoded and validated Pub/Sub message payload.
+        context: Reserved for Cloud Functions compatibility. Not used.
     """
-    # Log the received
+    # Log the received Pub/Sub message
     logger.info_log(f"Received pubsub_message: {pubsub_message}")
     try:
         db_connection = DB()
@@ -140,7 +126,8 @@ def process_etl_job(pubsub_message: dict, context: Optional[dict] = None):
 
         logger.info_log(
             f"start_date_time: {start_date_time}")
-
+        
+        end_date_time = None
         for attempt in range(max_retries):
             try:
                 logger.info_log(
@@ -177,7 +164,7 @@ def process_etl_job(pubsub_message: dict, context: Optional[dict] = None):
                     end_date_time=end_date_time
                 )
                 # Transform data (if needed)
-                transformed_data = transform_data(data)
+                transformed_data = transform_data(rows)
 
                 # Ensure dataset exists before loading
                 ensure_dataset_exists(

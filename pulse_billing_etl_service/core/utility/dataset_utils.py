@@ -1,13 +1,14 @@
+from time import sleep
 from typing import List, Tuple
-from google.cloud import bigquery
-from google.api_core.exceptions import NotFound
+
 import core.constants as const
 from core.bigquery.client import BQ
 from core.database.billing_etl_db import BillingETLDB
 from core.database.database_class import DB
 from core.utility import logger, return_type, sa_utils
-from google.api_core.exceptions import Forbidden
-from time import sleep
+from google.api_core.exceptions import Forbidden, NotFound
+from google.cloud import bigquery
+
 
 def create_single_dataset_with_verification(
     bq_client: BQ, project_id: str, dataset_suffix: str
@@ -126,7 +127,7 @@ def create_and_verify_pulse_datasets(org_id: str):
         # Construct dataset names using org_id prefix
         export_dataset_name = f"org_{org_id}_standard_export"
 
-        # Create Standerd Usage Cost Dataset
+        # Create Standard Usage Cost Dataset
         export_dataset_id, export_dataset_full_id = (
             create_single_dataset_with_verification(
                 bq_pulse, const.PROJECT_ID, export_dataset_name
