@@ -97,21 +97,6 @@ graph TD
 
 ---
 
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Runtime | Python 3.9+, Google Cloud Functions |
-| Trigger | Google Cloud Pub/Sub (HTTP push) |
-| Source Data | Google BigQuery (client environment) |
-| Destination | Google BigQuery (internal environment) |
-| Auth | GCP Service Account Impersonation |
-| Audit & Config | MySQL via SQLAlchemy |
-| Validation | Pydantic v2 |
-| Logging | Structured JSON (GCP Cloud Logging compatible) |
-
----
-
 ## Database Schema
 
 ### `billing_etl_status` — Audit trail for every ETL run
