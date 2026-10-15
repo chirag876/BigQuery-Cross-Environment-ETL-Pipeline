@@ -27,34 +27,7 @@ Each ETL run is triggered via a **Google Cloud Pub/Sub message** delivered as an
 
 ## Architecture
 
-```
-                    ┌─────────────────────────────┐
-                    │     Google Cloud Pub/Sub     │
-                    │     (HTTP trigger payload)   │
-                    └──────────────┬──────────────┘
-                                   │
-                                   ▼
-                    ┌─────────────────────────────┐
-                    │       Cloud Function         │
-                    │   Decode → Validate          │
-                    │   → Orchestrate ETL          │
-                    └───────┬─────────────┬────────┘
-                            │             │
-               ┌────────────▼──┐    ┌─────▼──────────────────────┐
-               │    MySQL      │    │    Client GCP Environment   │
-               │               │    │  (Impersonated Svc Account) │
-               │ • Org config  │    │   BigQuery Source Dataset   │
-               │ • ETL status  │    └─────────────┬──────────────┘
-               │ • Step flags  │                  │
-               └───────────────┘          Extract (batched)
-                                                  │
-                                                  ▼
-                                   ┌──────────────────────────────┐
-                                   │   Internal GCP Environment   │
-                                   │  BigQuery Destination Dataset │
-                                   │   (per-org isolated tables)  │
-                                   └──────────────────────────────┘
-```
+![Architecture diagram of chirag876/bigquery-cross-environment-etl-pipeline](https://github.com/chirag876/BigQuery-Cross-Environment-ETL-Pipeline/blob/main/BigQuery%20Cross-Environment%20Billing%20ETL%20Pipeline/core/diagram.png)
 
 ---
 
